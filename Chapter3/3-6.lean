@@ -19,7 +19,6 @@ namespace andOrCom
 end andOrCom
 
 namespace andOrAssoc
-
     lemma aal1 {p q r : Prop} : (p ∧ q) ∧ r → p ∧ (q ∧ r) :=
     λ h : (p ∧ q) ∧ r,
     have hp : p, from (h.left).left,
@@ -37,4 +36,33 @@ namespace andOrAssoc
         aal1
         aal2
 
+    lemma oal1 {p q r : Prop} : (p ∨ q) ∨ r → p ∨ (q ∨ r) :=
+    λ h : (p ∨ q) ∨ r,
+    h.elim 
+        (assume hpq : p ∨ q,
+            hpq.elim
+                (assume hp : p,
+                    show p ∨ q ∨ r, from or.inl hp)
+                (assume hq : q,
+                    show p ∨ q ∨ r, from or.inr $ or.inl hq))
+        (assume hr : r,
+            show p ∨ q ∨ r, from or.inr $ or.inr hr)
+    lemma oal2 {p q r : Prop} : p ∨ (q ∨ r) → (p ∨ q) ∨ r :=
+    λ h : p ∨ (q ∨ r),
+    h.elim 
+        (assume hp : p,
+            show (p ∨ q) ∨ r, from or.inl $ or.inl hp)
+        (assume hqr : q ∨ r,
+            hqr.elim
+                (assume hq : q,
+                    show (p ∨ q) ∨ r, from or.inl $ or.inr hq)
+                (assume hr : r,
+                    show (p ∨ q) ∨ r, from or.inr hr))
+    theorem or_assoc {p q r : Prop} : (p ∨ q) ∨ r ↔ p ∨ (q ∨ r) :=
+    iff.intro
+        oal1
+        oal2
 end andOrAssoc
+
+
+
