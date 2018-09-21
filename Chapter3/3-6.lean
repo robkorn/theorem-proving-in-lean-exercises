@@ -64,5 +64,63 @@ namespace andOrAssoc
         oal2
 end andOrAssoc
 
+namespace andOrDistrib
+    lemma aod1 {p q r : Prop} : p ∧ (q ∨ r) → (p ∧ q) ∨ (p ∧ r) :=
+    λ h : p ∧ (q ∨ r),
+    have hp : p, from h.left,
+    have hqr : (q ∨ r), from h.right,
+    hqr.elim 
+        (assume hq : q,
+            show (p ∧ q) ∨ (p ∧ r), from or.inl ⟨hp, hq⟩)
+        (assume hr : r,
+            show (p ∧ q) ∨ (p ∧ r), from or.inr ⟨hp, hr⟩)
 
 
+    lemma aod2 {p q r : Prop} : (p ∧ q) ∨ (p ∧ r) → p ∧ (q ∨ r) :=
+    λ h : (p ∧ q) ∨ (p ∧ r),
+    h.elim 
+        (assume hpq : p ∧ q,
+        have hp : p, from hpq.left,
+        have hq : q, from hpq.right,
+        and.intro
+            (show p, from hp)
+            (show q ∨ r, from or.inl hq))
+        (assume hpr : p ∧ r,
+        have hp : p, from hpr.left,
+        have hr : r, from hpr.right,
+        and.intro
+            (show p, from hp)
+            (show q ∨ r, from or.inr hr))
+    theorem and_or_distrib {p q r : Prop} : p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
+    iff.intro
+        aod1
+        aod2
+
+
+
+lemma oad1 {p q r : Prop} : p ∨ (q ∧ r) → (p ∨ q) ∧ (p ∨ r) :=
+λ h : p ∨ (q ∧ r),
+h.elim
+    (assume hp : p,
+     and.intro
+        (show p ∨ q,from or.inl hp)
+        (show p ∨ r, from or.inl hp))
+    (assume hqr : q ∧ r,
+     have hq : q, from hqr.left,
+     have hr : r, from hqr.right,
+     and.intro
+        (show p ∨ q, from or.inr hq)
+        (show p ∨ r, from or.inr hr))
+
+lemma oad2 {p q r : Prop} : (p ∨ q) ∧ (p ∨ r) → p ∨ (q ∧ r) := 
+λ h : (p ∨ q) ∧ (p ∨ r),
+have hpq : p ∨ q, from h.left,
+have hpr : p ∨ r, from h.right,
+sorry
+
+theorem or_and_distrib {p q r : Prop} : p ∨ (q ∧ r) ↔ (p ∨ q) ∧ (p ∨ r) :=
+iff.intro
+    (oad1)
+    (oad2)
+
+end andOrDistrib
