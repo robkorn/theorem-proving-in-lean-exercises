@@ -36,3 +36,5 @@ constant F : (nat -> nat) -> nat -- a "functional"
 #check (m, n).1 -- N
 #check (p.1, n) -- N × N
 #check F f -- N
+
+
