@@ -74,5 +74,17 @@ end
 example (h : ∃ x, p x ∧ q x) : ∃ x, q x ∧ p x :=
 let ⟨w, hpw, hqw⟩ := h in ⟨w, hqw, hpw⟩
 
+example : (∃ x, p x ∧ q x) → ∃ x, q x ∧ p x :=
+assume ⟨w, hpw, hqw⟩, ⟨w, hqw, hpw⟩
+
+def is_even (a : nat) := ∃ b, a = 2 * b
+
+
+theorem even_plus_even {a b : nat}
+    (h1 : is_even a) (h2 : is_even b) : is_even (a + b) :=
+match h1, h2 with
+    ⟨w1, hw1⟩, ⟨w2, hw2⟩ := ⟨w1 + w2, by rw [hw1, hw2, mul_add]⟩
+end
+#check even_plus_even
 
 end matchh

@@ -38,6 +38,8 @@ calc
 
 theorem T₂ : a = e :=
 by rw [h1, h2, h3, add_comm, h4]
+#print T₂
+#check T₂
 
 theorem T₃ : a = e :=
 by simp [h1, h2, h3, h4]
